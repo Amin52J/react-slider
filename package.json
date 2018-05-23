@@ -1,0 +1,53 @@
+{
+  "name": "simple-react-slider",
+  "version": "1.0.0",
+  "description": "Simple react slider, with touch support and 0 dependencies",
+  "main": "index.js",
+  "author": "Stanko",
+  "license": "MIT",
+  "scripts": {
+    "build": "NODE_ENV=production babel src -d dist && node-sass --include-path src src/main.scss dist/main.css && postcss --use autoprefixer -o dist/main.css dist/main.css && recursive-uglifyjs dist",
+    "postbuild": "cpx \"dist/main.css\" demo && cd demo && yarn build",
+    "prebuild": "rimraf ./dist/",
+    "precommit": "git add",
+    "preversion": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stanko/react-slider.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Stanko/react-slider/issues"
+  },
+  "homepage": "https://stanko.github.io/react-slider",
+  "devDependencies": {
+    "autoprefixer": "^8.5.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "cpx": "^1.5.0",
+    "node-sass": "^4.9.0",
+    "nodemon": "^1.17.5",
+    "postcss-cli-simple": "^1.0.4",
+    "recursive-uglifyjs": "^1.0.0",
+    "rimraf": "^2.6.2"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.6.1",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  }
+}

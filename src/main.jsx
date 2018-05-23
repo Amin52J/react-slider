@@ -1,22 +1,37 @@
-var Slider = React.createClass({
-  getDefaultProps() {
-    return {
-      loop: false,
-      selected: 0,
-      showArrows: true,
-      showNav: true,
-    };
-  },
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-  getInitialState() {
-    return {
-      dragStart: 0,
-      dragStartTime: new Date(),
-      index: 0,
-      lastIndex: 0,
-      transition: false,
-    };
-  },
+export default class Slider extends Component {
+  static displayName = 'Slider';
+
+  static defaultProps = {
+    loop: false,
+    selected: 0,
+    showArrows: true,
+    showNav: true,
+  };
+
+  static propTypes = {
+    loop: PropTypes.bool,
+    selected: PropTypes.number,
+    showArrows: PropTypes.bool,
+    showNav: PropTypes.bool
+  };
+
+  static getDragX = (event, isTouch) => {
+    return isTouch ?
+      event.touches[ 0 ].pageX :
+      event.pageX;
+  };
+
+  state = {
+    dragStart: 0,
+    dragStartTime: new Date(),
+    index: 0,
+    lastIndex: 0,
+    transition: false,
+  };
 
   componentWillMount() {
     const { selected } = this.props;
@@ -25,7 +40,7 @@ var Slider = React.createClass({
       index: selected,
       lastIndex: selected,
     });
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     const { selected } = this.props;
@@ -33,13 +48,7 @@ var Slider = React.createClass({
     if (selected !== nextProps.selected) {
       this.goToSlide(nextProps.selected);
     }
-  },
-
-  getDragX(event, isTouch) {
-    return isTouch ?
-      event.touches[0].pageX :
-      event.pageX;
-  },
+  }
 
   handleDragStart(event, isTouch) {
     const x = this.getDragX(event, isTouch);
@@ -48,9 +57,9 @@ var Slider = React.createClass({
       dragStart: x,
       dragStartTime: new Date(),
       transition: false,
-      slideWidth: ReactDOM.findDOMNode(this.refs.slider).offsetWidth,
+      slideWidth: ReactDOM.findDOMNode(this.slider).offsetWidth,
     });
-  },
+  }
 
   handleDragMove(event, isTouch) {
     const {
@@ -74,7 +83,7 @@ var Slider = React.createClass({
     this.setState({
       index: newIndex,
     });
-  },
+  }
 
   handleDragEnd() {
     const {
@@ -108,7 +117,7 @@ var Slider = React.createClass({
       lastIndex: newIndex,
       transition: true,
     });
-  },
+  }
 
   goToSlide(index, event) {
     const {
@@ -128,11 +137,11 @@ var Slider = React.createClass({
     }
 
     this.setState({
-      index: index,
+      index,
       lastIndex: index,
       transition: true,
-    })
-  },
+    });
+  }
 
   renderNav() {
     const { children } = this.props;
@@ -142,16 +151,16 @@ var Slider = React.createClass({
       const buttonClasses = i === lastIndex ? 'Slider-navButton Slider-navButton--active' : 'Slider-navButton';
       return (
         <button
-          className={ buttonClasses }
-          key={ i }
-          onClick={ (event) => this.goToSlide(i, event) } />
+          className={buttonClasses}
+          key={`slider-navigation--${i}`}
+          onClick={event => this.goToSlide(i, event)} />
       );
-    })
+    });
 
     return (
-      <div className='Slider-nav'>{ nav }</div>
+      <div className='Slider-nav'>{nav}</div>
     );
-  },
+  }
 
   renderArrows() {
     const {
@@ -163,18 +172,18 @@ var Slider = React.createClass({
     const arrowsClasses = showNav ? 'Slider-arrows' : 'Slider-arrows Slider-arrows--noNav';
 
     return (
-      <div className={ arrowsClasses }>
-        { loop || lastIndex > 0 ?
+      <div className={arrowsClasses}>
+        {loop || lastIndex > 0 ?
           <button
             className='Slider-arrow Slider-arrow--left'
-            onClick={ (event) => this.goToSlide(lastIndex - 1, event) } /> : null }
-        { loop || lastIndex < children.length - 1 ?
+            onClick={event => this.goToSlide(lastIndex - 1, event)} /> : null}
+        {loop || lastIndex < children.length - 1 ?
           <button
             className='Slider-arrow Slider-arrow--right'
-            onClick={ (event) => this.goToSlide(lastIndex + 1, event) } /> : null }
+            onClick={event => this.goToSlide(lastIndex + 1, event)} /> : null}
       </div>
     );
-  },
+  }
 
   render() {
     const {
@@ -196,74 +205,24 @@ var Slider = React.createClass({
     const slidesClasses = transition ? 'Slider-slides Slider-slides--transition' : 'Slider-slides';
 
     return (
-      <div className='Slider' ref='slider'>
-        { showArrows ? this.renderArrows() : null }
-        { showNav ? this.renderNav() : null }
+      <div className='Slider' ref={slider => {
+        this.slider = slider;
+      }}>
+        {showArrows ? this.renderArrows() : null}
+        {showNav ? this.renderNav() : null}
 
         <div
           className='Slider-inner'
-          onTouchStart={ (event) => this.handleDragStart(event, true) }
-          onTouchMove={ (event) => this.handleDragMove(event, true) }
-          onTouchEnd={ () => this.handleDragEnd(true) }>
+          onTouchStart={event => this.handleDragStart(event, true)}
+          onTouchMove={event => this.handleDragMove(event, true)}
+          onTouchEnd={() => this.handleDragEnd(true)}>
           <div
-            className={ slidesClasses }
-            style={ slidesStyles }>
-            { children }
+            className={slidesClasses}
+            style={slidesStyles}>
+            {children}
           </div>
         </div>
       </div>
     );
   }
-});
-
-var ExampleSlider1 = React.createClass({
-  render() {
-    return (
-      <div className='ExampleSliders'>
-        <h4>Slider with default options</h4>
-        <Slider>
-          <div style={{ background: '#21BB9A' }}>A</div>
-          <div style={{ background: '#329ADD' }}>B</div>
-          <div style={{ background: '#9A5CB9' }}>C</div>
-          <div style={{ background: '#E64C3C' }}>D</div>
-          <div style={{ background: '#2D3F52' }}>E</div>
-        </Slider>
-      </div>
-    );
-  }
-});
-
-var ExampleSlider2 = React.createClass({
-  render() {
-    return (
-      <div className='ExampleSliders'>
-        <h4>Slider with custom options</h4>
-        <pre>
-        loop: true<br/>
-        showNav: false<br/>
-        selected: 2
-        </pre>
-        <Slider
-          loop={ true }
-          showNav={ false }
-          selected={ 2 }>
-          <div style={{ background: '#21BB9A' }}>A</div>
-          <div style={{ background: '#329ADD' }}>B</div>
-          <div style={{ background: '#9A5CB9' }}>C</div>
-          <div style={{ background: '#E64C3C' }}>D</div>
-          <div style={{ background: '#2D3F52' }}>E</div>
-        </Slider>
-      </div>
-    );
-  }
-});
-
-ReactDOM.render(
-  React.createElement(ExampleSlider1, null),
-  document.getElementById('slider1')
-);
-
-ReactDOM.render(
-  React.createElement(ExampleSlider2, null),
-  document.getElementById('slider2')
-);
+}
