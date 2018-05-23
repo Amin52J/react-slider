@@ -10,7 +10,8 @@
     "postbuild": "cpx \"dist/main.css\" demo && cd demo && yarn build",
     "prebuild": "rimraf ./dist/",
     "precommit": "git add",
-    "preversion": "npm run build"
+    "preversion": "npm run build",
+    "deploy-gh-pages": "npm run build && git subtree push --prefix demo origin gh-pages"
   },
   "repository": {
     "type": "git",
