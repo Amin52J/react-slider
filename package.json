@@ -1,17 +1,18 @@
 {
   "name": "simple-react-slider",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple react slider, with touch support and 0 dependencies",
   "main": "index.js",
   "author": "Amin Jafari",
   "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production babel src -d dist && node-sass --include-path src src/main.scss dist/main.css && postcss --use autoprefixer -o dist/main.css dist/main.css && recursive-uglifyjs dist",
-    "postbuild": "cpx \"dist/main.css\" demo && cd demo && yarn build",
+    "postbuild": "cpx \"dist/main.css\" demo && cd demo && yarn build && cpx \"./package.json\" dist && cpx \"./README.md\" dist && cpx \"./LICENSE.md\" dist",
     "prebuild": "rimraf ./dist/",
     "precommit": "git add",
     "preversion": "npm run build",
-    "deploy-gh-pages": "npm run build && git subtree push --prefix demo origin gh-pages"
+    "deploy-gh-pages": "npm run build && git subtree push --prefix demo origin gh-pages",
+    "version": "cpx \"./package.json\" dist"
   },
   "repository": {
     "type": "git",
