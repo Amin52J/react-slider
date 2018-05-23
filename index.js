@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Slider from '../src/main';
+import Slider from '../src';
 
 const ExampleSlider1 = props => (
   <div className='ExampleSliders'>
