@@ -7,11 +7,11 @@
   "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production babel src -d dist && node-sass --include-path src src/main.scss dist/main.css && postcss --use autoprefixer -o dist/main.css dist/main.css && recursive-uglifyjs dist",
-    "postbuild": "cpx \"dist/main.css\" demo && cd demo && yarn build && cpx \"./package.json\" dist && cpx \"./README.md\" dist && cpx \"./LICENSE.md\" dist",
+    "postbuild": "cpx \"dist/main.css\" demo && cpx \"./package.json\" dist && cpx \"./README.md\" dist && cpx \"./LICENSE.md\" dist && cd demo && yarn build ",
     "prebuild": "rimraf ./dist/",
     "precommit": "git add",
-    "preversion": "npm run build",
-    "deploy-gh-pages": "npm run build && git subtree push --prefix demo origin gh-pages",
+    "preversion": "yarn build && yarn postbuild",
+    "deploy-gh-pages": "yarn build && git subtree push --prefix demo origin gh-pages",
     "version": "cpx \"./package.json\" dist"
   },
   "repository": {
