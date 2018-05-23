@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -17,12 +17,6 @@ export default class Slider extends Component {
     selected: PropTypes.number,
     showArrows: PropTypes.bool,
     showNav: PropTypes.bool
-  };
-
-  static getDragX = (event, isTouch) => {
-    return isTouch ?
-      event.touches[ 0 ].pageX :
-      event.pageX;
   };
 
   state = {
@@ -48,6 +42,12 @@ export default class Slider extends Component {
     if (selected !== nextProps.selected) {
       this.goToSlide(nextProps.selected);
     }
+  }
+
+  getDragX(event, isTouch) {
+    return isTouch ?
+      event.touches[ 0 ].pageX :
+      event.pageX;
   }
 
   handleDragStart(event, isTouch) {
