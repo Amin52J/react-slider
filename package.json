@@ -1,13 +1,13 @@
 {
   "name": "simple-react-slider",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple react slider, with touch support and 0 dependencies",
   "main": "index.js",
   "author": "Amin Jafari",
   "license": "MIT",
   "scripts": {
-    "build": "NODE_ENV=production babel src -d dist && node-sass --include-path src src/main.scss dist/main.css && postcss --use autoprefixer -o dist/main.css dist/main.css && recursive-uglifyjs dist",
-    "postbuild": "cpx \"dist/main.css\" demo && cpx \"./package.json\" dist && cpx \"./README.md\" dist && cpx \"./LICENSE.md\" dist && cd demo && yarn build ",
+    "build": "NODE_ENV=production babel src -d dist && node-sass --include-path src src/index.scss dist/index.css && postcss --use autoprefixer -o dist/index.css dist/index.css && recursive-uglifyjs dist",
+    "postbuild": "cpx \"dist/index.css\" demo && cpx \"./package.json\" dist && cpx \"./README.md\" dist && cpx \"./LICENSE.md\" dist && cd demo && yarn build ",
     "prebuild": "rimraf ./dist/",
     "precommit": "git add",
     "preversion": "yarn build && yarn postbuild",
