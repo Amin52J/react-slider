@@ -6,6 +6,7 @@ export default class Slider extends Component {
   static displayName = 'Slider';
 
   static defaultProps = {
+    childCount: null,
     loop: false,
     selected: 0,
     showArrows: true,
@@ -13,6 +14,7 @@ export default class Slider extends Component {
   };
 
   static propTypes = {
+    childCount: PropTypes.number,
     loop: PropTypes.bool,
     selected: PropTypes.number,
     showArrows: PropTypes.bool,
@@ -50,7 +52,7 @@ export default class Slider extends Component {
       event.pageX;
   }
 
-  handleDragStart(event, isTouch) {
+  handleDragStart = (event, isTouch) => {
     const x = this.getDragX(event, isTouch);
 
     this.setState({
@@ -59,9 +61,9 @@ export default class Slider extends Component {
       transition: false,
       slideWidth: ReactDOM.findDOMNode(this.slider).offsetWidth,
     });
-  }
+  };
 
-  handleDragMove(event, isTouch) {
+  handleDragMove = (event, isTouch) => {
     const {
       dragStart,
       lastIndex,
@@ -83,10 +85,11 @@ export default class Slider extends Component {
     this.setState({
       index: newIndex,
     });
-  }
+  };
 
-  handleDragEnd() {
+  handleDragEnd = () => {
     const {
+      childCount,
       children,
     } = this.props;
     const {
@@ -107,8 +110,8 @@ export default class Slider extends Component {
 
     if (newIndex < 0) {
       newIndex = 0;
-    } else if (newIndex >= children.length) {
-      newIndex = children.length - 1;
+    } else if (newIndex >= (childCount || children.length)) {
+      newIndex = (childCount || children.length) - 1;
     }
 
     this.setState({
@@ -117,10 +120,11 @@ export default class Slider extends Component {
       lastIndex: newIndex,
       transition: true,
     });
-  }
+  };
 
-  goToSlide(index, event) {
+  goToSlide = (index, event) => {
     const {
+      childCount,
       children,
       loop,
     } = this.props;
@@ -131,9 +135,9 @@ export default class Slider extends Component {
     }
 
     if (index < 0) {
-      index = loop ? children.length - 1 : 0;
-    } else if (index >= children.length) {
-      index = loop ? 0 : children.length - 1;
+      index = loop ? (childCount || children.length) - 1 : 0;
+    } else if (index >= (childCount || children.length)) {
+      index = loop ? 0 : (childCount || children.length) - 1;
     }
 
     this.setState({
@@ -141,32 +145,34 @@ export default class Slider extends Component {
       lastIndex: index,
       transition: true,
     });
-  }
+  };
 
-  renderNav() {
-    const { children } = this.props;
+  renderNav = () => {
+    const { children, childCount } = this.props;
     const { lastIndex } = this.state;
 
-    const nav = children.map((slide, i) => {
+    const nav = [];
+    for (let i = 0; i < (childCount || children.length); i++) {
       const buttonClasses = i === lastIndex ? 'Slider-navButton Slider-navButton--active' : 'Slider-navButton';
-      return (
+      nav.push(
         <button
           className={buttonClasses}
           key={`slider-navigation--${i}`}
           onClick={event => this.goToSlide(i, event)} />
       );
-    });
+    }
 
     return (
       <div className='Slider-nav'>{nav}</div>
     );
-  }
+  };
 
-  renderArrows() {
+  renderArrows = () => {
     const {
       children,
       loop,
       showNav,
+      childCount
     } = this.props;
     const { lastIndex } = this.state;
     const arrowsClasses = showNav ? 'Slider-arrows' : 'Slider-arrows Slider-arrows--noNav';
@@ -177,19 +183,20 @@ export default class Slider extends Component {
           <button
             className='Slider-arrow Slider-arrow--left'
             onClick={event => this.goToSlide(lastIndex - 1, event)} /> : null}
-        {loop || lastIndex < children.length - 1 ?
+        {loop || lastIndex < (childCount || children.length) - 1 ?
           <button
             className='Slider-arrow Slider-arrow--right'
             onClick={event => this.goToSlide(lastIndex + 1, event)} /> : null}
       </div>
     );
-  }
+  };
 
   render() {
     const {
       children,
       showArrows,
       showNav,
+      childCount
     } = this.props;
 
     const {
@@ -199,8 +206,8 @@ export default class Slider extends Component {
 
 
     const slidesStyles = {
-      width: `${ 100 * children.length }%`,
-      transform: `translateX(${ -1 * index * (100 / children.length) }%)`,
+      width: `${ 100 * (childCount || children.length) }%`,
+      transform: `translateX(${ -1 * index * (100 / (childCount || children.length)) }%)`,
     };
     const slidesClasses = transition ? 'Slider-slides Slider-slides--transition' : 'Slider-slides';
 
@@ -219,7 +226,7 @@ export default class Slider extends Component {
           <div
             className={slidesClasses}
             style={slidesStyles}>
-            {children}
+            {typeof children === 'function' ? children(this.goToSlide) : children}
           </div>
         </div>
       </div>
