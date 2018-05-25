@@ -27,11 +27,11 @@ const ExampleSlider2 = props => (
       loop={true}
       showNav={false}
       selected={2}>
-      <div style={{ background: '#21BB9A' }}>A</div>
-      <div style={{ background: '#329ADD' }}>B</div>
-      <div style={{ background: '#9A5CB9' }}>C</div>
-      <div style={{ background: '#E64C3C' }}>D</div>
-      <div style={{ background: '#2D3F52' }}>E</div>
+        <div style={{ background: '#21BB9A' }}>A</div>
+        <div style={{ background: '#329ADD' }}>B</div>
+        <div style={{ background: '#9A5CB9' }}>C</div>
+        <div style={{ background: '#E64C3C' }}>D</div>
+        <div style={{ background: '#2D3F52' }}>E</div>
     </Slider>
   </div>
 );
