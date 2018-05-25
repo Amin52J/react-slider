@@ -1,6 +1,6 @@
 {
   "name": "simple-react-slider",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Simple react slider, with touch support and 0 dependencies",
   "main": "index.js",
   "author": "Amin Jafari",
