@@ -5,7 +5,7 @@ import Slider from '../src';
 const ExampleSlider1 = props => (
   <div className='ExampleSliders'>
     <h4>Slider with default options</h4>
-    <Slider>
+    <Slider autoplay loop>
       <div style={{ background: '#21BB9A' }}>A</div>
       <div style={{ background: '#329ADD' }}>B</div>
       <div style={{ background: '#9A5CB9' }}>C</div>
