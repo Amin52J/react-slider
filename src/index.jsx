@@ -6,6 +6,8 @@ export default class Slider extends Component {
   static displayName = 'Slider';
 
   static defaultProps = {
+    autoplay: false,
+    autoplaySpeed: 7000,
     childCount: null,
     loop: false,
     selected: 0,
@@ -14,6 +16,8 @@ export default class Slider extends Component {
   };
 
   static propTypes = {
+    autoplay: PropTypes.bool,
+    autoplaySpeed: PropTypes.number,
     childCount: PropTypes.number,
     loop: PropTypes.bool,
     selected: PropTypes.number,
@@ -36,6 +40,14 @@ export default class Slider extends Component {
       index: selected,
       lastIndex: selected,
     });
+  }
+
+  componentDidMount() {
+    if (this.props.autoplay) {
+      setInterval(() => {
+        this.goToSlide(this.state.lastIndex + 1);
+      }, this.props.autoplaySpeed);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
