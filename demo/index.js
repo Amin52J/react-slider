@@ -5,7 +5,7 @@ import Slider from '../src';
 const ExampleSlider1 = props => (
   <div className='ExampleSliders'>
     <h4>Slider with default options</h4>
-    <Slider autoplay loop>
+    <Slider>
       <div style={{ background: '#21BB9A' }}>A</div>
       <div style={{ background: '#329ADD' }}>B</div>
       <div style={{ background: '#9A5CB9' }}>C</div>
@@ -19,13 +19,19 @@ const ExampleSlider2 = props => (
   <div className='ExampleSliders'>
     <h4>Slider with custom options</h4>
     <pre>
+        autoplay: true<br />
+        autoplaySpeed: 7000<br />
         loop: true<br />
-        showNav: false<br />
-        selected: 2
+        selected: 2<br />
+        showArrows: true<br />
+        showNav: true<br />
         </pre>
     <Slider
-      loop={true}
-      showNav={false}
+      autoplay
+      autoplaySpeed={5000}
+      loop
+      showNav
+      showArrows
       selected={2}>
         <div style={{ background: '#21BB9A' }}>A</div>
         <div style={{ background: '#329ADD' }}>B</div>

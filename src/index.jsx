@@ -30,6 +30,7 @@ export default class Slider extends Component {
     dragStartTime: new Date(),
     index: 0,
     lastIndex: 0,
+    mouseOver: false,
     transition: false,
   };
 
@@ -43,11 +44,7 @@ export default class Slider extends Component {
   }
 
   componentDidMount() {
-    if (this.props.autoplay) {
-      setInterval(() => {
-        this.goToSlide(this.state.lastIndex + 1);
-      }, this.props.autoplaySpeed);
-    }
+    this.initAutoplay();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -66,6 +63,7 @@ export default class Slider extends Component {
 
   handleDragStart = (event, isTouch) => {
     const x = this.getDragX(event, isTouch);
+    this.onMouseOver();
 
     this.setState({
       dragStart: x,
@@ -109,6 +107,8 @@ export default class Slider extends Component {
       index,
       lastIndex,
     } = this.state;
+
+    this.onMouseOut();
 
     const timeElapsed = new Date().getTime() - dragStartTime.getTime();
     const offset = lastIndex - index;
@@ -203,6 +203,24 @@ export default class Slider extends Component {
     );
   };
 
+  initAutoplay = () => {
+    if (this.props.autoplay) {
+      this.autoplayInterval = setInterval(() => {
+        this.goToSlide(this.state.lastIndex + 1);
+      }, this.props.autoplaySpeed);
+    }
+  };
+
+  onMouseOver = () => {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+    }
+  };
+
+  onMouseOut = () => {
+    this.initAutoplay();
+  };
+
   render() {
     const {
       children,
@@ -234,10 +252,14 @@ export default class Slider extends Component {
           className='Slider-inner'
           onTouchStart={event => this.handleDragStart(event, true)}
           onTouchMove={event => this.handleDragMove(event, true)}
-          onTouchEnd={() => this.handleDragEnd(true)}>
+          onTouchEnd={() => this.handleDragEnd(true)}
+          onMouseOver={this.onMouseOver}
+          onMouseOut={this.onMouseOut}
+        >
           <div
             className={slidesClasses}
-            style={slidesStyles}>
+            style={slidesStyles}
+          >
             {typeof children === 'function' ? children(this.goToSlide) : children}
           </div>
         </div>
