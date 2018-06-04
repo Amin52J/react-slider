@@ -55,6 +55,10 @@ export default class Slider extends Component {
     }
   }
 
+  componentWillUnmount(){
+    this.onMouseOver();
+  }
+
   getDragX(event, isTouch) {
     return isTouch ?
       event.touches[ 0 ].pageX :
